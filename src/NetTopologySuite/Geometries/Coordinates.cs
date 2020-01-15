@@ -49,7 +49,7 @@
         /// </summary>
         /// <param name="coordinate">supplied coordinate</param>
         /// <returns>number of ordinates recorded</returns>
-        public static int Dimension(Coordinate coordinate)
+        public static int Dimension(Coordinate? coordinate)
         {
             // NTS-specific note: be VERY CAREFUL with methods that rely on checking the types of
             // Coordinate objects when compared to JTS: NTS offers the same four types (with
@@ -90,7 +90,7 @@
         /// </summary>
         /// <param name="coordinate">supplied coordinate</param>
         /// <returns>number of measures recorded </returns>
-        public static int Measures(Coordinate coordinate)
+        public static int Measures(Coordinate? coordinate)
         {
             // NTS-specific note: be VERY CAREFUL with methods that rely on checking the types of
             // Coordinate objects when compared to JTS: NTS offers the same four types (with

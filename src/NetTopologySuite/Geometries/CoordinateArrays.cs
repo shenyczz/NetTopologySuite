@@ -16,7 +16,7 @@ namespace NetTopologySuite.Geometries
         /// </summary>
         /// <param name="pts">pts supplied coordinates</param>
         /// <returns>number of ordinates recorded</returns>
-        public static int Dimension(Coordinate[]? pts)
+        public static int Dimension(Coordinate?[]? pts)
         {
             if (pts == null || pts.Length == 0)
             {
@@ -35,7 +35,7 @@ namespace NetTopologySuite.Geometries
         /// </summary>
         /// <param name="pts">supplied coordinates</param>
         /// <returns>number of measures recorded</returns>
-        public static int Measures(Coordinate[]? pts)
+        public static int Measures(Coordinate?[]? pts)
         {
             if (pts == null || pts.Length == 0)
             {
