@@ -1327,7 +1327,7 @@ namespace NetTopologySuite.Geometries
         /// The <c>quadrantSegments</c> argument allows controlling the accuracy of
         /// the approximation by specifying the number of line segments used to
         /// represent a quadrant of a circle</para>
-        /// <para>The end cap style specifies the buffer geometry that will be
+        /// <para>The end cap style specifies the buffer geometry that will be 
         /// created at the ends of linestrings.  The styles provided are:
         /// <ul>
         /// <li><see cref="EndCapStyle.Round" /> - (default) a semi-circle</li>
@@ -1499,13 +1499,13 @@ namespace NetTopologySuite.Geometries
         public Geometry Union(Geometry other)
         {
             // handle empty geometry cases
-            if (IsEmpty || other.IsEmpty)
+            if (IsEmpty || (other == null || other.IsEmpty))
             {
-                if (IsEmpty && other.IsEmpty)
+                if (IsEmpty && (other == null || other.IsEmpty))
                     return OverlayOp.CreateEmptyResult(SpatialFunction.Union, this, other, _factory);
 
                 // Special case: if either input is empty ==> other input
-                if (other.IsEmpty) return Copy();
+                if (other == null || other.IsEmpty) return Copy();
                 if (IsEmpty) return other.Copy();
             }
             CheckNotGeometryCollection(this);
@@ -1530,7 +1530,7 @@ namespace NetTopologySuite.Geometries
             // special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
             if (IsEmpty)
                 return OverlayOp.CreateEmptyResult(SpatialFunction.Difference, this, other, _factory);
-            if (other.IsEmpty)
+            if (other == null || other.IsEmpty)
                 return Copy();
 
             CheckNotGeometryCollection(this);
@@ -1554,14 +1554,14 @@ namespace NetTopologySuite.Geometries
         public Geometry SymmetricDifference(Geometry other)
         {
             // handle empty geometry cases
-            if (IsEmpty || other.IsEmpty)
+            if (IsEmpty || (other == null || other.IsEmpty))
             {
                 // both empty - check dimensions
-                if (IsEmpty && other.IsEmpty)
+                if (IsEmpty && (other == null || other.IsEmpty))
                     return OverlayOp.CreateEmptyResult(SpatialFunction.SymDifference, this, other, _factory);
 
                 // special case: if either input is empty ==> result = other arg
-                if (other.IsEmpty) return Copy();
+                if (other == null || other.IsEmpty) return Copy();
                 if (IsEmpty) return other.Copy();
             }
 
