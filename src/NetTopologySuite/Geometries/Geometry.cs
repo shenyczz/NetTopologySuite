@@ -170,7 +170,7 @@ namespace NetTopologySuite.Geometries
         /// <summary>
         /// The bounding box of this <c>Geometry</c>.
         /// </summary>
-        private Envelope _envelope;
+        private Envelope? _envelope;
 
         /// <summary>
         /// Sets the ID of the Spatial Reference System used by the <c>Geometry</c>.
@@ -254,9 +254,9 @@ namespace NetTopologySuite.Geometries
         /// </summary>
         /// <param name="array"> an array to validate.</param>
         /// <returns><c>true</c> if any of <c>array</c>s elements are <c>null</c>.</returns>
-        public static bool HasNullElements(object[] array)
+        public static bool HasNullElements(object?[] array)
         {
-            foreach (object o in array)
+            foreach (object? o in array)
                 if (o == null)
                     return true;
             return false;
@@ -1001,7 +1001,7 @@ namespace NetTopologySuite.Geometries
         /// <param name="g">The <c>Geometry</c> with which to compare this <c>Geometry</c></param>
         /// <returns><c>true</c> if the two <c>Geometry</c>s are topologically equal.</returns>
         /// <seealso cref="EqualsTopologically"/>
-        public bool Equals(Geometry g)
+        public bool Equals(Geometry? g)
         {
             if (g == null)
                 return false;
@@ -1068,7 +1068,7 @@ namespace NetTopologySuite.Geometries
         /// <seealso cref="GetHashCode"/>
         /// <seealso cref="Normalized"/>
         /// <seealso cref="Normalize"/>
-        public override bool Equals(object o)
+        public override bool Equals(object? o)
         {
             var g = o as Geometry;
             return g != null && EqualsExact(g);
@@ -1109,7 +1109,7 @@ namespace NetTopologySuite.Geometries
         /// <param name="obj1"></param>
         /// <param name="obj2"></param>
         /// <returns></returns>
-        public static bool operator ==(Geometry obj1, Geometry obj2)
+        public static bool operator ==(Geometry? obj1, Geometry? obj2)
         {
             return Equals(obj1, obj2);
         }
@@ -1120,7 +1120,7 @@ namespace NetTopologySuite.Geometries
         /// <param name="obj1"></param>
         /// <param name="obj2"></param>
         /// <returns></returns>
-        public static bool operator !=(Geometry obj1, Geometry obj2)
+        public static bool operator !=(Geometry? obj1, Geometry? obj2)
         {
             return !(obj1 == obj2);
         }
@@ -1499,13 +1499,13 @@ namespace NetTopologySuite.Geometries
         public Geometry Union(Geometry other)
         {
             // handle empty geometry cases
-            if (IsEmpty || (other == null || other.IsEmpty))
+            if (IsEmpty || other.IsEmpty)
             {
-                if (IsEmpty && (other == null || other.IsEmpty))
+                if (IsEmpty && other.IsEmpty)
                     return OverlayOp.CreateEmptyResult(SpatialFunction.Union, this, other, _factory);
 
                 // Special case: if either input is empty ==> other input
-                if (other == null || other.IsEmpty) return Copy();
+                if (other.IsEmpty) return Copy();
                 if (IsEmpty) return other.Copy();
             }
             CheckNotGeometryCollection(this);
@@ -1530,7 +1530,7 @@ namespace NetTopologySuite.Geometries
             // special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
             if (IsEmpty)
                 return OverlayOp.CreateEmptyResult(SpatialFunction.Difference, this, other, _factory);
-            if (other == null || other.IsEmpty)
+            if (other.IsEmpty)
                 return Copy();
 
             CheckNotGeometryCollection(this);
@@ -1554,14 +1554,14 @@ namespace NetTopologySuite.Geometries
         public Geometry SymmetricDifference(Geometry other)
         {
             // handle empty geometry cases
-            if (IsEmpty || (other == null || other.IsEmpty))
+            if (IsEmpty || other.IsEmpty)
             {
                 // both empty - check dimensions
-                if (IsEmpty && (other == null || other.IsEmpty))
+                if (IsEmpty && other.IsEmpty)
                     return OverlayOp.CreateEmptyResult(SpatialFunction.SymDifference, this, other, _factory);
 
                 // special case: if either input is empty ==> result = other arg
-                if (other == null || other.IsEmpty) return Copy();
+                if (other.IsEmpty) return Copy();
                 if (IsEmpty) return other.Copy();
             }
 
@@ -1667,7 +1667,7 @@ namespace NetTopologySuite.Geometries
         /// <param name="g">A geometry</param>
         /// <returns>true if the input geometries are exactly equal in their normalized form</returns>
         /// <seealso cref="EqualsExact(Geometry)"/>
-        public bool EqualsNormalized(Geometry g)
+        public bool EqualsNormalized(Geometry? g)
         {
             if (g == null) return false;
             return Normalized().EqualsExact(g.Normalized());
@@ -1812,7 +1812,7 @@ namespace NetTopologySuite.Geometries
         /// defined in "Normal Form For Geometry" in the NTS Technical
         /// Specifications.
         /// </returns>
-        public int CompareTo(object o)
+        public int CompareTo(object? o)
         {
             return CompareTo(o as Geometry);
         }
@@ -1844,19 +1844,18 @@ namespace NetTopologySuite.Geometries
         /// defined in "Normal Form For Geometry" in the NTS Technical
         /// Specifications.
         /// </returns>
-        public int CompareTo(Geometry geom)
+        public int CompareTo(Geometry? geom)
         {
-            var other = geom as Geometry;
-            if (other == null)
+            if (geom == null)
                 return -1;
 
-            if (SortIndex != other.SortIndex)
-                return (int)SortIndex - (int)other.SortIndex;
-            if (IsEmpty && other.IsEmpty)
+            if (SortIndex != geom.SortIndex)
+                return (int)SortIndex - (int)geom.SortIndex;
+            if (IsEmpty && geom.IsEmpty)
                 return 0;
             if (IsEmpty)
                 return -1;
-            if (other.IsEmpty)
+            if (geom.IsEmpty)
                 return 1;
             return CompareToSameClass(geom);
         }
@@ -1889,7 +1888,7 @@ namespace NetTopologySuite.Geometries
         /// defined in "Normal Form For Geometry" in the NTS Technical
         /// Specifications.
         /// </returns>
-        public int CompareTo(object o, IComparer<CoordinateSequence> comp)
+        public int CompareTo(object? o, IComparer<CoordinateSequence> comp)
         {
             var other = o as Geometry;
             if (other == null)
@@ -1904,7 +1903,7 @@ namespace NetTopologySuite.Geometries
             if (other.IsEmpty)
                 return 1;
 
-            return CompareToSameClass(o, comp);
+            return CompareToSameClass(o!, comp);
         }
 
         /// <summary>
