@@ -281,7 +281,7 @@ namespace NetTopologySuite.Geometries
         /// <returns>a Coordinate which is a vertex of this <c>Geometry</c>.</returns>
         /// <returns><c>null</c> if this Geometry is empty.
         /// </returns>
-        public abstract Coordinate Coordinate { get; }
+        public abstract Coordinate? Coordinate { get; }
 
         /// <summary>
         /// Returns an array containing the values of all the vertices for
